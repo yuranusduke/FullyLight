@@ -161,24 +161,32 @@ setMethod(f = 'fit',
                     Overall <- list()
                     meta_names <- names(meta_params_samples)
                     countl <- 1
-                    dims <- c()
+                    first_layer_dim <- dim(meta_params_samples[['hidden1']]$x_prev)[2]
+                    first_layer_dim <- ifelse(first_layer_dim > 10, 10, first_layer_dim)
+                    dims <- c(first_layer_dim)
                     for (name in meta_names){
                       real <- F
                       if(dim(meta_params[[name]]$W)[2] > 10){
-                        weight[[countl]] <- as.matrix(t(meta_params[[name]]$W[, 1 : 10, drop = F])) # only visualize 10 for faster computation
+                        ver_coor <- sample(1 : dim(meta_params[[name]]$W)[2], size = 10, replace = F)
+                        weight[[countl]] <- as.matrix(t(meta_params[[name]]$W[, ver_coor, drop = F])) # only visualize 10 for faster computation
                         real <- T
                       }
                       if (dim(meta_params[[name]]$W)[1] > 10)
                       {
-                        if (real)
-                          weight[[countl]] <- as.matrix(t(meta_params[[name]]$W[1 : 10, 1 : 10, drop = F]))
-                        else
-                          weight[[countl]] <- as.matrix(t(meta_params[[name]]$W[1 : 10, , drop = F]))
+                        if (real){
+                          ver_coor <- sample(1 : dim(meta_params[[name]]$W)[2], size = 10, replace = F)
+                          hor_coor <- sample(1 : dim(meta_params[[name]]$W)[1], size = 10, replace = F)
+                          weight[[countl]] <- as.matrix(t(meta_params[[name]]$W[hor_coor, ver_coor, drop = F]))
+                        }
+                        else{
+                          hor_coor <- sample(1 : dim(meta_params[[name]]$W)[1], size = 10, replace = F)
+                          weight[[countl]] <- as.matrix(t(meta_params[[name]]$W[hor_coor, , drop = F]))
+                        }
                       }
-                      else
+                      else if (dim(meta_params[[name]]$W)[2] <= 10 & dim(meta_params[[name]]$W)[1] <= 10)
                         weight[[countl]] <- as.matrix(t(meta_params[[name]]$W))
                       if(dim(meta_params[[name]]$b)[2] > 10)
-                        bias[[countl]] <- as.matrix(t(meta_params[[name]]$b[,1 : 10, drop = F]))
+                        bias[[countl]] <- as.matrix(t(meta_params[[name]]$b[,1 : 10, drop = F])) # keep dimension
                       else
                         bias[[countl]] <- as.matrix(t(meta_params[[name]]$b))
                       dims <- c(dims, dim(bias[[countl]])[1])
@@ -290,6 +298,10 @@ setMethod(f = 'fit',
 #' @param output bool. Default is FALSE, TRUE for shiny output.
 #' @return History of learning, including training loss and metric for each learning step and trained model, etc..
 #' @import ggplot2
+#' @import methods
+#' @import grDevices
+#' @import png
+#' @import graphics
 #' @examples
 #' x <- matrix(c(3, 7, 9, 10, 0, 9), nrow = 2)
 #' y <- matrix(c(0, 1, 0, 1, 0, 0), nrow = 2, byrow = TRUE)

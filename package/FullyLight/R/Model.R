@@ -2,6 +2,21 @@
 #
 # Created by Kunhong Yu(444447)
 # Date: 2022/05/03
+
+#' Class S4 representing a FullyLight Model.
+#'
+#' Class defines an object with FullyLight Model's characteristics.
+#'
+#' @name FullyModel-class
+#' @slot dims Dimensions of NN
+#' @slot input_shape Input's shape
+#' @slot hidden_activation Hidden layer's activation
+#' @slot out_activation Output activation
+#' @slot kernel_initializer Kernel's initialization
+#' @slot l1 L1 regularization
+#' @slot l2 L2 regularization
+#' @rdname FullyModel-class
+#' @exportClass FullyModel
 setClass('FullyModel',
          slots = list(dims = 'numeric',
                       input_shape = 'numeric',

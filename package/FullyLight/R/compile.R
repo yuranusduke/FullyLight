@@ -44,6 +44,7 @@ setMethod(f = 'compile',
 #' @param l2 numeric. L2 regularization penalty.
 #' @param ... All other arguments related to the function.
 #' @return A list of compiled functions, including optimizer, loss function and metrics.
+#' @import stats
 #' @examples
 #' compile_funcs <- Compile(loss = 'categorical_crossentropy',
 #'                          optimizer = 'adam',

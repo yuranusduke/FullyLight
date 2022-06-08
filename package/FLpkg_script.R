@@ -2,7 +2,7 @@
 #
 # Created by Kunhong Yu(444447)
 # Date: 2022/06/04
-
+rm(list = ls())
 library(devtools)
 library(roxygen2)
 
@@ -28,13 +28,21 @@ devtools::document(pkg = my_package)
 # export(Fit)
 # export(Model)
 # export(Predict)
+# export(Summary)
+# export(to_categoricalF)
+# exportClasses(FullyModel)
 # import(assertthat)
 # import(caret)
 # import(factoextra)
 # import(ggimage)
 # import(ggplot2)
 # import(glue)
+# import(grDevices)
+# import(graphics)
+# import(methods)
+# import(png)
 # import(progress)
+# import(stats)
 # importFrom(Rcpp,sourceCpp)
 # useDynLib(FullyLight)
 
@@ -50,8 +58,9 @@ devtools::document(pkg = my_package)
 # Encoding: UTF-8
 # Roxygen: list(markdown = TRUE)
 # RoxygenNote: 7.1.2
-# Imports: glue, progress, factoextra, ggimage, caret, Rcpp, ggplot2, assertthat
+# Imports: glue, progress, factoextra, ggimage, caret, Rcpp, ggplot2, assertthat, png, grDevices, methods
 # LinkingTo: Rcpp
+
 
 # Importantly, src should be built manually, which stores all C++ files(*.cpp)
 

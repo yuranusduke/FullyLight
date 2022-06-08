@@ -7,6 +7,7 @@
 # Created by Kunhong Yu(444447)
 # Date: 2022/05/03
 library(pryr)
+library(assertthat)
 
 #############################
 #       Hyper-parameters    #
@@ -37,7 +38,7 @@ l2 <- 0.
 # y <- dataset[, dim(dataset)[2]]
 # y <- as.factor(y)
 # y <- as.vector(unclass(y))
-# y <- to_categoricalF(y, num_classes = num_classes)
+# y <- to_categorical(y, num_classes = num_classes)
 # y
 FL <- function(data_name, dims, hidden_activation, 
                kernel_initializer, optimizer, metric, epochs,
@@ -98,22 +99,22 @@ FL <- function(data_name, dims, hidden_activation,
   # Step 3 Normalize the inputs
   # Step 5 Forward propagation(Vectorization/Activation functions)
   # Now, first define our model
-  models <- Model(dims = dims, input_shape = ncol(x), hidden_activation = hidden_activation,
+  models <- FullyLight::Model(dims = dims, input_shape = ncol(x), hidden_activation = hidden_activation,
                   out_activation = 'softmax', kernel_initializer = kernel_initializer, l1 = l1, l2 = l2)
   # In particular, we implement this procedure using vectorization
   # then compile our model
   message(Summary(models))
-  compile_funcs <- Compile(loss = 'categorical_crossentropy',
+  compile_funcs <- FullyLight::Compile(loss = 'categorical_crossentropy',
                            optimizer = optimizer, metric = metric, learning_rate = learning_rate, l1 = l1, l2 = l2)
   # Step 6 Compute cost
   # Step 7 Backward pass
   # Step 8 Update parameters
   # Now we start training
-  res <- Fit(x = x, y = y, models = models, compile_funcs = compile_funcs,
+  res <- FullyLight::Fit(x = x, y = y, models = models, compile_funcs = compile_funcs,
              validation_rate = validation_rate, validation_data = NULL, epochs = epochs,
              batch_size = batch_size, verbose = 1, shuffle = T, isimage = isimage, data_name = data_name, output = output)
   # Step 9 Make a prediction
-  eval_res <- Evaluate(x = data_list$test_data, y = data_list$test_label, models = res$models, params = res$params,
+  eval_res <- FullyLight::Evaluate(x = data_list$test_data, y = data_list$test_label, models = res$models, params = res$params,
                        loss = 'categorical_crossentropy',
                        metric = metric)
   eval_res$eval_res

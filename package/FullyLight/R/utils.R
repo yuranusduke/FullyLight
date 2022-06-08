@@ -308,7 +308,7 @@ stack_overall <- function(Overall, layers, df){
     return((x - min(x)) /(max(x) - min(x)))
   }
   for (l in 1 : layers) {
-      df2$sizes[df2$layers == l] <- Overall$bias[[l]]
+      df2$sizes[df2$layers == (l + 1)] <- Overall$bias[[l]]
   }
   # Increase size for better plotting
   #df2$sizes <- normalize(df2$sizes)
@@ -330,7 +330,7 @@ vis_nn <- function(no_nodes_per_layer = c(2, 3, 2, 3, 2),
     theme_bw()
 
   ##function to add all arrows
-  for (i in 1 : (layers - 1)) {
+  for (i in 1 : (layers)) {
     for (j in 1 : (no_nodes_per_layer[i])) {
       for (o in 1 : (no_nodes_per_layer[i + 1])) {
         x1 <- i
@@ -339,11 +339,11 @@ vis_nn <- function(no_nodes_per_layer = c(2, 3, 2, 3, 2),
         y2 <- df4[df4$layers == (i + 1), ]$nodes[o]
 
         coor <- data.frame(x = c(x1, x2), y = c(y1, y2))
-        weights <- Overall$weight[[x1 + 1]][[j, o]]
+        weights <- Overall$weight[[x1]][[j, o]]
         if (is.null(oldOverall))
           weights_old <- weights
         else
-          weights_old <- oldOverall$weight[[x1 + 1]][[j, o]]
+          weights_old <- oldOverall$weight[[x1]][[j, o]]
 
         p <- p + geom_path(data = coor, aes(x = x, y = y), color = ifelse(weights > weights_old, 'green', 'blue'), size = 0.5,
                            alpha = ifelse(weights > weights_old, 10, 0.5))
