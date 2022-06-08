@@ -13,7 +13,9 @@ In `code/app/app.R`, you may run it directly, and play with it.
 
 ### Demo
 
-[YouTube Link](https://www.youtube.com/watch?v=gaI6ZJowIkU&t=26s)
+[YouTube Link short](https://www.youtube.com/watch?v=gaI6ZJowIkU&t=26s)
+
+[YouTube Link long](https://youtu.be/D9LNaROAKt0)
 
 <hr>
 
