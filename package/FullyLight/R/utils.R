@@ -234,41 +234,41 @@ gradient_checking <- function(){ # here we check two layers
 ##############################
 #         Grad-CAM           #
 ##############################
-saliency_map <- function(models, x, y, params, img_size) {
-  # This function computes saliency map
-  # https://arxiv.org/abs/1911.11293
-  # Args :
-  #   --models: models instance
-  #   --x: input x
-  #   --y: output label
-  #   --params
-  # return :
-  #   --final: saliency map
-  # 1. compute forward
-  meta_params <- Forward(models = models, x = x, params = params)
-  # 2. get logits of label
-  #output <- meta_params$final_layer$z # logits
-  #output <- output * y # shape [m, num_classes]
-  # 3. compute gradient for output w.r.t. the inputs
-  meta_grads <- Backward(meta_params, y = -1, models) # for saliency map's gradient
-  # 4. get map
-  saliency <- abs(meta_grads$hidden1$dA) # [m, in_dim]
-  # 5. reshape to get image size
-  img_channels <- dim(saliency)[2] / (img_size ** 2)
-  final <- list()
-  for (i in 1 : dim(saliency)[1]){
-    s <- saliency[i, ] # [in_dim, ]
-    dim(s) <- c(img_size, img_size, img_channels)
-    temp <- matrix(rep(0., img_size ** 2), nrow = img_size)
-    for (j in 1 : img_channels){
-      s[,,j] <- t(s[,,j])
-      temp <- pmax(temp, s[,,j])
-    } # s has shape: [h, w, c], temp has shape [h, w]
-    final[[i]] <- image(temp) # convert to image
-  }
-  # `final` is final output saliency map
-  return (final)
-}
+# saliency_map <- function(models, x, y, params, img_size) {
+#   # This function computes saliency map
+#   # https://arxiv.org/abs/1911.11293
+#   # Args :
+#   #   --models: models instance
+#   #   --x: input x
+#   #   --y: output label
+#   #   --params
+#   # return :
+#   #   --final: saliency map
+#   # 1. compute forward
+#   meta_params <- Forward(models = models, x = x, params = params)
+#   # 2. get logits of label
+#   #output <- meta_params$final_layer$z # logits
+#   #output <- output * y # shape [m, num_classes]
+#   # 3. compute gradient for output w.r.t. the inputs
+#   meta_grads <- Backward(meta_params, y = -1, models) # for saliency map's gradient
+#   # 4. get map
+#   saliency <- abs(meta_grads$hidden1$dA) # [m, in_dim]
+#   # 5. reshape to get image size
+#   img_channels <- dim(saliency)[2] / (img_size ** 2)
+#   final <- list()
+#   for (i in 1 : dim(saliency)[1]){
+#     s <- saliency[i, ] # [in_dim, ]
+#     dim(s) <- c(img_size, img_size, img_channels)
+#     temp <- matrix(rep(0., img_size ** 2), nrow = img_size)
+#     for (j in 1 : img_channels){
+#       s[,,j] <- t(s[,,j])
+#       temp <- pmax(temp, s[,,j])
+#     } # s has shape: [h, w, c], temp has shape [h, w]
+#     final[[i]] <- image(temp) # convert to image
+#   }
+#   # `final` is final output saliency map
+#   return (final)
+# }
 
 ##############################
 #          Vis NN            #
